@@ -4,11 +4,13 @@
         <div class="form-group">
             <input type="text" placeholder="email" class="form-control" v-model="email">        
             <input type="password" placeholder="password" class="form-control" v-model="password">
+            <br>
             <button class="btn btn-primary" @click="signIn">Sign in</button>
         </div>
         <br>
         <p>{{error.message}}</p>
         <br>
+        <router-link to="/signup">Already a user? Sign up</router-link>
     </div>
 </template>
 
