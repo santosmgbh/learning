@@ -44,7 +44,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.POST, "/login").permitAll()
 			.anyRequest().authenticated()
 			.and()
-			
+						.addFilterBefore(new SimpleCORSFilter(),
+								SimpleCORSFilter.class)
 			// filtra requisições de login
 			.addFilterBefore(new JWTLoginFilter("/login", authenticationManagerBean()),
 	                UsernamePasswordAuthenticationFilter.class)
