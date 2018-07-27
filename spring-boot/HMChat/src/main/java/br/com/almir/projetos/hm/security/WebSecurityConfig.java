@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 @EnableWebSecurity
@@ -44,11 +45,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(HttpMethod.POST, "/login").permitAll()
 			.anyRequest().authenticated()
 			.and()
-						.addFilterBefore(new SimpleCORSFilter(),
-								SimpleCORSFilter.class)
 			// filtra requisições de login
 			.addFilterBefore(new JWTLoginFilter("/login", authenticationManagerBean()),
-	                UsernamePasswordAuthenticationFilter.class)
+	                UsernamePasswordAuthenticationFilter.class)			
 			
 			// filtra outras requisições para verificar a presença do JWT no header
 			.addFilterBefore(new JWTAuthenticationFilter(),
@@ -63,5 +62,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.passwordEncoder(getEncoder());
     	
 	}
+	
 	
 }
