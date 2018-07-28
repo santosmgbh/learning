@@ -21,8 +21,8 @@ import br.com.almir.projetos.hm.model.User;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-	protected JWTLoginFilter(String url, AuthenticationManager authManager) {
-		super(new AntPathRequestMatcher(url));
+	public JWTLoginFilter(String url, AuthenticationManager authManager) {
+		super(new AntPathRequestMatcher(url));		
 		setAuthenticationManager(authManager);
 	}
 

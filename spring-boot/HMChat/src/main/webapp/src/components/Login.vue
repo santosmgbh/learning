@@ -5,11 +5,11 @@
       <body>
         <tr>
           <label >Login</label>
-          <input type="text"/>
+          <input type="text" v-model="username"/>
         </tr>
         <tr>
           <label >Senha</label>
-          <input type="password"/>
+          <input type="password" v-model="password"/>
         </tr>
         <tr>
           <button @click="login()">Login</button>
@@ -25,23 +25,29 @@ export default {
   name: "Login",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+      username: '',
+      password: ''
     };
   },
   methods: {
-    login() {      
+
+    login() {          
+      
+      var config = {headers: {'Content-Type': 'application/json'}};
+      // config.body = {"name":"josé","username": "12345", "password":"12345", "active":"1"};
+      var me = this;
       this.$http
-        .get(process.env.API_URL)
+        .post('/hmchat-api/login', {username: this.username, password:this.password})
         .then(
           response => {
-            console.log(response);
+            this.$router.push({name: "chat", params: {username:me.username}});
           },
           error => {
             console.log(error);
           }
         )
         .finally(function() {});
-      this.$router.push("chat");
+      // this.$router.push("chat");
     }
   }
 };

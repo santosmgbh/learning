@@ -49,5 +49,12 @@ public class UserController {
 		List<User> users = userRepository.findAll();
 		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, path="teste")
+	@ResponseBody
+	public ResponseEntity<String> teste() {
+		List<User> users = userRepository.findAll();
+		return new ResponseEntity<String>("HIIII", HttpStatus.OK);
+	}
 
 }
