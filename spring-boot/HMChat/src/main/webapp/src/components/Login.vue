@@ -37,11 +37,11 @@ export default {
       // config.body = {"name":"josé","username": "12345", "password":"12345", "active":"1"};
       var me = this;
       this.$http
-        .post('/hmchat-api/login', {username: this.username, password:this.password})
+        .post(process.env.API_URL+'login', {username: this.username, password:this.password})
         .then(
           response => {            
             localStorage.setItem('Authorization', response.headers.map.authorization[0]);            
-            localStorage.setItem('User', {username: me.username, password:me.password})
+            localStorage.setItem('User', JSON.stringify({username: me.username, password:me.password}))
             this.$router.push({name: "chat"});
           },
           error => {

@@ -18,9 +18,7 @@ public class ChatMessage implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ChatMessage() {
-		
-	}
+
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
@@ -28,7 +26,7 @@ public class ChatMessage implements Serializable{
 	private String fromUsername;
 	private String toUsername;
 	private Date sended;
-	private Boolean read;
+	private Boolean read = false;
 	
 	
 

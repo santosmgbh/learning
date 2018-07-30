@@ -41,6 +41,9 @@ public class User implements Serializable{
 	@Column(name="password", nullable=false)
 	private String password;
 	
+	@Column(name="CONNECTED", nullable=false)
+	private Boolean connected = false;
+	
 	@Column(name = "active")
 	private int active;
 	
@@ -99,6 +102,14 @@ public class User implements Serializable{
 
 	public void setMessages(List<ChatMessage> messages) {
 		this.messages = messages;
+	}
+
+	public Boolean getConnected() {
+		return connected;
+	}
+
+	public void setConnected(Boolean connected) {
+		this.connected = connected;
 	}
 	
 

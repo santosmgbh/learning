@@ -10,14 +10,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.session.SessionManagementFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
+
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private DataSource restDataSource;
+	
+	@Autowired 
+	private CorsFilter corsFilter;
 
 	@Bean
 	PasswordEncoder getEncoder() {
@@ -41,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// filtra requisições de login
 				.addFilterBefore(new JWTLoginFilter("/login", authenticationManagerBean()),
 						UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(corsFilter, ChannelProcessingFilter.class)
 
 				// filtra outras requisições para verificar a presença do JWT no header
 				.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -55,5 +56,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.passwordEncoder(getEncoder());
 
 	}
-
+	
 }

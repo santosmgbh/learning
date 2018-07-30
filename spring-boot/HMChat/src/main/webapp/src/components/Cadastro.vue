@@ -40,7 +40,7 @@ export default {
   methods: {
     register() {
       this.$http
-        .post("/hmchat-api/users/", this.user)
+        .post(process.env.API_URL+"users/", this.user)
         .then(
           response => {
             console.log("Usuário cadastrado")

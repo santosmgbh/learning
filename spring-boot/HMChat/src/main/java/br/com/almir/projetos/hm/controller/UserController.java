@@ -61,7 +61,7 @@ public class UserController {
 			if(loggedUser.equals(u.getUsername()))
 				continue;
 			
-			List<ChatMessage> messages = new ArrayList<ChatMessage>();
+			List<ChatMessage> messages = new ArrayList<>();
 			List<ChatMessage> messagesToUser = chatMessageRepository.findByFromUsernameAndToUsername(loggedUser, u.getUsername());
 			List<ChatMessage> messagesFromUser = chatMessageRepository.findByFromUsernameAndToUsername(u.getUsername(), loggedUser);
 			messages.addAll(messagesToUser);
