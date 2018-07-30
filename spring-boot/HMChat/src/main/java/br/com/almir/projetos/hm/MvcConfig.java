@@ -18,24 +18,6 @@ public class MvcConfig implements WebMvcConfigurer  {
 	    registry.addViewController("/").setViewName("forward:/dist/index.html");
 	}
 	
-//	@Override
-//	public void addCorsMappings(CorsRegistry registry) {
-//		System.out.println("addCorsMapping");
-//		registry.addMapping("/**").allowedOrigins("*")
-//        .allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")
-//        .allowedMethods("GET", "POST", "OPTIONS")
-//        .allowCredentials(true).maxAge(3600);
-//	    registry.addMapping("/hmchat-api/**")
-//        .allowedOrigins("*")
-//        .allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")
-//        .allowedMethods("GET", "POST", "OPTIONS")
-//        .allowCredentials(true).maxAge(3600);
-//	    registry.addMapping("/login")
-//        .allowedOrigins("*")
-//        .allowedHeaders("Origin", "X-Requested-With", "Content-Type", "Accept")
-//        .allowedMethods("POST", "OPTIONS")
-//        .allowCredentials(true).maxAge(3600);
-//	}
 	
 
 }

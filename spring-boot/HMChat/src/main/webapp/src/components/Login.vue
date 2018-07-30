@@ -13,7 +13,7 @@
         </tr>
         <tr>
           <button @click="login()">Login</button>
-          <button >Cadastre-se</button>
+          <button @click="signup()">Cadastre-se</button>
         </tr>
       </body>
     </table>
@@ -39,8 +39,10 @@ export default {
       this.$http
         .post('/hmchat-api/login', {username: this.username, password:this.password})
         .then(
-          response => {
-            this.$router.push({name: "chat", params: {username:me.username}});
+          response => {            
+            localStorage.setItem('Authorization', response.headers.map.authorization[0]);            
+            localStorage.setItem('User', {username: me.username, password:me.password})
+            this.$router.push({name: "chat"});
           },
           error => {
             console.log(error);
@@ -48,6 +50,9 @@ export default {
         )
         .finally(function() {});
       // this.$router.push("chat");
+    },
+    signup(){
+      this.$router.push({name: "cadastro"});
     }
   }
 };

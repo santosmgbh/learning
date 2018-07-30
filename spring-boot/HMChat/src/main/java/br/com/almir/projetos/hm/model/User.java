@@ -1,6 +1,7 @@
 package br.com.almir.projetos.hm.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 
@@ -42,6 +44,15 @@ public class User implements Serializable{
 	@Column(name = "active")
 	private int active;
 	
+	@Transient
+	private List<ChatMessage> messages;
+	
+	
+	
+	public User() {
+		this.active = 1;//Future implementation to control activity access from user.  
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -81,6 +92,15 @@ public class User implements Serializable{
 	public void setActive(int active) {
 		this.active = active;
 	}
+
+	public List<ChatMessage> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<ChatMessage> messages) {
+		this.messages = messages;
+	}
+	
 
 
 

@@ -1,4 +1,4 @@
-package br.com.almir.projetos.hm.config;
+package br.com.almir.projetos.hm.security;
 
 import javax.sql.DataSource;
 
@@ -19,22 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
-import br.com.almir.projetos.hm.security.CorsFilter;
-import br.com.almir.projetos.hm.security.JWTAuthenticationFilter;
-import br.com.almir.projetos.hm.security.JWTLoginFilter;
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private DataSource restDataSource;
-
-	@Bean
-	CorsFilter corsFilter() {
-		CorsFilter filter = new CorsFilter();
-		return filter;
-	}
 
 	@Bean
 	PasswordEncoder getEncoder() {
@@ -46,15 +36,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.		
 		csrf().disable().authorizeRequests().antMatchers("/").permitAll().antMatchers("/static/**")
 				.permitAll().antMatchers("/dist/**").permitAll().antMatchers("/home").permitAll().antMatchers("/h2/**")
-				.permitAll().antMatchers("/users/*").permitAll().antMatchers("/socket/**").permitAll().antMatchers("/login").permitAll().anyRequest()
+				.permitAll().antMatchers(HttpMethod.POST, "/users/").permitAll().antMatchers("/socket/**").permitAll().antMatchers("/login").permitAll().anyRequest()
 				.authenticated().and()
 				// filtra requisições de login
 				.addFilterBefore(new JWTLoginFilter("/login", authenticationManagerBean()),
 						UsernamePasswordAuthenticationFilter.class)
 
 				// filtra outras requisições para verificar a presença do JWT no header
-				.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).
-				addFilterBefore(corsFilter(), SessionManagementFilter.class);
+				.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//				addFilterBefore(corsFilter(), SessionManagementFilter.class);
 	}
 
 	@Override

@@ -3,19 +3,23 @@
           <table>
       <body>
         <tr>
+          <label>Nome:</label>
+          <input type="text" v-model="user.name"/>
+        </tr>
+        <tr>
           <label>Usuário:</label>
-          <input type="text"/>
+          <input type="text" v-model="user.username"/>
         </tr>
         <tr>
           <label>Senha:</label>
-          <input type="password"/>
+          <input type="password" v-model="user.password"/>
         </tr>
-        <tr>
+        <!-- <tr>
           <label >Repita a Senha:</label>
-          <input type="password2"/>
-        </tr>
+          <input type="password2" v-model="password2"/>
+        </tr> -->
         <tr>
-          <button >Cadastrar</button>
+          <button @click="register()">Cadastrar</button>
         </tr>
       </body>
     </table>
@@ -24,6 +28,30 @@
 
 <script>
 export default {
-    
-}
+  data() {
+    return {
+      user: {
+        name: "",
+        username: "",
+        password: ""                
+      }
+    };
+  },
+  methods: {
+    register() {
+      this.$http
+        .post("/hmchat-api/users/", this.user)
+        .then(
+          response => {
+            console.log("Usuário cadastrado")
+            this.$router.push({name: "login"});
+          },
+          error => {
+            console.log(error);
+          }
+        )
+        .finally(function() {});
+    }
+  }
+};
 </script>
