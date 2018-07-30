@@ -13,9 +13,12 @@
 
             </b-col>
             <b-col cols="3" class="border" >
-              <ul>
-                <li v-for="user in users" @click="selectUser(user)" :key="user.id">nome: {{user.name}} <br> status: {{user.connected}} <br> não lidas: {{getDontReadMessages(user)}}</li>                 
-              </ul>
+              <div class="list-group">
+                <a class="list-group-item" v-bind:class="{ active: user.username == userSelected.username }" v-for="user in users" @click="selectUser(user)" :key="user.id">
+                  {{user.name}}
+                  <span class="badge">{{getDontReadMessages(user)}}</span>
+                </a>                
+              </div>
             </b-col>          
         </b-row>
         <b-row align-v="center" class="h-10">
@@ -72,7 +75,7 @@ export default {
             let newMessage = JSON.parse(response.body);
 
             me.addMessage(newMessage, newMessage.fromUsername);
-            
+
             Notification.show('New message', 'Message from '+newMessage.fromUsername);            
           }
         );
