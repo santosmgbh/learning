@@ -40,6 +40,7 @@
 <script>
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
+import Notification from "../util/notification";
 
 export default {
   data() {
@@ -71,6 +72,8 @@ export default {
             let newMessage = JSON.parse(response.body);
 
             me.addMessage(newMessage, newMessage.fromUsername);
+            
+            Notification.show('New message', 'Message from '+newMessage.fromUsername);            
           }
         );
 

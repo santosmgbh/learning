@@ -1,6 +1,6 @@
 <template>
-  <div>
-
+  <div> 
+    <a href="http://localhost:8090/hmchat-api/swagger-ui.html">Docs</a>
     <table>
       <body>
         <tr>

@@ -15,15 +15,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private static final String[] SWAGGER_PERMITS = { "/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs",
+			"/webjars/**" };
+
 	@Autowired
 	private DataSource restDataSource;
-	
-	@Autowired 
+
+	@Autowired
 	private CorsFilter corsFilter;
 
 	@Bean
@@ -33,19 +35,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.		
-		csrf().disable().authorizeRequests().antMatchers("/").permitAll().antMatchers("/static/**")
-				.permitAll().antMatchers("/dist/**").permitAll().antMatchers("/home").permitAll().antMatchers("/h2/**")
-				.permitAll().antMatchers(HttpMethod.POST, "/users/").permitAll().antMatchers("/socket/**").permitAll().antMatchers("/login").permitAll().anyRequest()
-				.authenticated().and()
+		httpSecurity.csrf().disable().authorizeRequests().
+		antMatchers("/").permitAll()
+		.antMatchers("/static/**").permitAll()
+		.antMatchers("/dist/**").permitAll()
+		.antMatchers(SWAGGER_PERMITS).permitAll()
+		.antMatchers("/home").permitAll()
+		.antMatchers("/h2/**").permitAll()
+		.antMatchers(HttpMethod.POST, "/users/").permitAll()
+		.antMatchers("/socket/**").permitAll()
+		.antMatchers("/login").permitAll().anyRequest().authenticated().and()
 				// filtra requisições de login
 				.addFilterBefore(new JWTLoginFilter("/login", authenticationManagerBean()),
 						UsernamePasswordAuthenticationFilter.class)
+				// filtro de cors
 				.addFilterBefore(corsFilter, ChannelProcessingFilter.class)
 
-				// filtra outras requisições para verificar a presença do JWT no header
-				.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//				addFilterBefore(corsFilter(), SessionManagementFilter.class);
+				// filtra outras requisições para verificar a presença do JWT no
+				// header
+				.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);//
 	}
 
 	@Override
@@ -56,5 +64,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.passwordEncoder(getEncoder());
 
 	}
-	
+
 }

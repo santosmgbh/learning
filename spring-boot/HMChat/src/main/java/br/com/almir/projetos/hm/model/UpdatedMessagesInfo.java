@@ -5,10 +5,12 @@ public class UpdatedMessagesInfo {
 	private String fromUsername;
 	private String toUsername;
 	
+	public UpdatedMessagesInfo(){
+		
+	}
 	
 	
 	public UpdatedMessagesInfo(String fromUsername, String toUsername) {
-		super();
 		this.fromUsername = fromUsername;
 		this.toUsername = toUsername;
 	}

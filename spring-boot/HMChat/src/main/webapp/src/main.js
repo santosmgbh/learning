@@ -5,6 +5,7 @@ import App from './App'
 import Router from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
 import VueResource from 'vue-resource'
+import Notifications from 'vue-notification'
 import Login from './components/Login'
 import Cadastro from './components/Cadastro'
 import Chat from './components/Chat'
@@ -12,6 +13,7 @@ import Chat from './components/Chat'
 Vue.use(Router)
 Vue.use(BootstrapVue);
 Vue.use(VueResource)
+Vue.use(Notifications)
 
 Vue.config.productionTip = false
 
