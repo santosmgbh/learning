@@ -1,38 +1,61 @@
 <template>
-    <b-container > 
-      Logado como: {{loggedUser.username}} 
-      <b-button @click="logout()">
-                  Sair
-              </b-button>      
-        <b-row class="h-90">
-            <b-col cols="9" class="border ">
-                {{userSelected.name}}
-              <ul>
+    <b-container style="height:100%" class="border">    
+        <b-row style="height:10%" >
+          <b-col cols="9" >
+              Logado como: <strong>{{loggedUser.username}}</strong>
+          </b-col>
+          <b-col cols="3" >
+              <b-link href="#" @click="logout">Sair</b-link>        
+          </b-col>           
+        </b-row>
+        <b-row style="height:70%">
+            <b-col cols="9" class="border" id="scrollMessages" style="overflow-y: auto;">                
+                <b-list-group>
+                  <b-list-group-item  v-for="msg in userSelected.messages" :key="msg.id">                    
+                                                            
+
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1"><span v-if="msg.fromUsername == loggedUser.username">Eu</span> <span v-if="msg.fromUsername != loggedUser.username">{{msg.fromUsername}}</span> disse: </h5>
+                      <small>{{msg.sended | formatDate}}</small>
+                    </div>
+                    <p class="mb-1">
+                      {{msg.text}}
+                    </p>
+                    <small>                      
+                      <font-awesome-icon icon="check" title="Mensagem lida!" v-show="msg.read"/>                      
+                    </small>
+
+                  </b-list-group-item>
+                </b-list-group>
+              <!-- <ul>
                 <li v-for="msg in userSelected.messages" :key="msg.id"><span v-if="msg.fromUsername == loggedUser.username">Me</span> <span>{{msg.fromUsername}}</span> : {{msg.text}} lida: {{msg.read}}</li>                 
-              </ul>
+              </ul> -->
 
             </b-col>
-            <b-col cols="3" class="border" >
-              <div class="list-group">
-                <a class="list-group-item" v-bind:class="{ active: user.username == userSelected.username }" v-for="user in users" @click="selectUser(user)" :key="user.id">
+            <b-col cols="3" class="border" style="overflow-y: auto;"  >
+              <strong>Usuários</strong>             
+              <b-list-group>
+                <b-list-group-item class="d-flex justify-content-between align-items-center" v-bind:class="{ active: user.username == userSelected.username }" v-for="user in users" 
+                v-show="user.username !== loggedUser.username"
+                @click="selectUser(user)" :key="user.id">
                   {{user.name}}
-                  <span class="badge">{{getDontReadMessages(user)}}</span>
-                </a>                
-              </div>
+                  <b-badge variant="primary" pill v-show="getDontReadMessages(user) > 0">{{getDontReadMessages(user)}}</b-badge>
+                </b-list-group-item>
+              </b-list-group>
             </b-col>          
         </b-row>
-        <b-row align-v="center" class="h-10">
-            <b-col cols="11"  >
+        <b-row align-v="center" style="height:20%">
+            <b-col cols="9" >
               <b-form-textarea class="mt-1 mb-1" id="textarea1"
                       v-model="text"
-                      placeholder="Enter something"
+                      placeholder="Digite uma mensagem"
                       :rows="3"
                       :max-rows="6"
                       :no-resize="false">
               </b-form-textarea>  
             </b-col>            
-            <b-col cols="1" >
-              <b-button @click="send()">
+            <b-col cols="3" >
+              <b-button @click="send()" style="width:100%;height: 90px;">
                   Enviar
               </b-button>
             </b-col>       
@@ -56,7 +79,7 @@ export default {
       loggedUser: {} // Usuário logado
     };
   },
-  mounted() {
+  mounted() {    
     this.loggedUser = JSON.parse(localStorage.getItem("User"));
     this.connect();
     this.loadUsers();
@@ -76,7 +99,10 @@ export default {
 
             me.addMessage(newMessage, newMessage.fromUsername);
 
-            Notification.show('New message', 'Message from '+newMessage.fromUsername);            
+            Notification.show(
+              "Novas mensagens",
+              "Message from " + newMessage.fromUsername
+            );
           }
         );
 
@@ -84,7 +110,7 @@ export default {
           "/chat/messagesRead/" + me.loggedUser.username,
           function(response) {
             let updatedMessagesInfo = JSON.parse(response.body);
-            me.checkMessagesRead(updatedMessagesInfo.fromUsername);
+            me.checkMessagesRead(updatedMessagesInfo.toUsername);
           }
         );
 
@@ -139,13 +165,15 @@ export default {
       for (let i in this.users) {
         if (this.users[i].username == username) {
           if (!this.users[i].messages) this.users[i].messages = [];
+          this.userSelected = this.users[i];
           this.users[i].messages.push(message);
+          break;
         }
       }
     },
-    checkMessagesRead(fromUsername) {
+    checkMessagesRead(toUsername) {
       for (let i in this.users) {
-        if (this.users[i].username == fromUsername) {
+        if (this.users[i].username == toUsername) {
           for (let m in this.users[i].messages) {
             this.users[i].messages[m].read = true;
           }
@@ -163,13 +191,26 @@ export default {
       }
       return dontReadMessages;
     },
-    selectUser(user) {
+    selectUser(user) {      
+
       this.userSelected = user;
-      this.checkReadMessages(user.username, this.loggedUser.username);
+
+      let containsNotReadMessages = false;
       for (let i in user.messages) {
         let message = user.messages[i];
-        message.read = true;
+        if (!message.read) {
+          containsNotReadMessages = true;
+          message.read = true;
+        }
       }
+      if (containsNotReadMessages)
+        this.checkReadMessages(user.username, this.loggedUser.username);
+
+      setTimeout(function(){
+        var element = document.getElementById("scrollMessages");
+        element.scrollTop = element.scrollHeight - element.clientHeight;
+      }, 500)
+      
     },
     send() {
       var message = {
@@ -182,6 +223,8 @@ export default {
       this.stompClient.send("/app/sendMessage", JSON.stringify(message));
 
       me.addMessage(message, this.userSelected.username);
+
+      this.text = "";
     },
     checkReadMessages(fromUsername, toUsername) {
       this.stompClient.send(
@@ -190,7 +233,8 @@ export default {
       );
     },
     logout() {
-      this.stompClient.send("/app/userDisconnected", JSON.stringify(me.user));
+      this.stompClient.send("/app/userDisconnected", JSON.stringify(this.user));
+      this.$router.push({ name: "login" });            
     }
   }
 };

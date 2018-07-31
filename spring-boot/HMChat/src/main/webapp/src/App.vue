@@ -1,6 +1,6 @@
 <template>
-  <div id="app" style="height:500px" >
-    <notifications group="foo" />
+  <div id="app" style="height:500px" >    
+    <notifications group="foo" position="top center" />
     <router-view/>
   </div>
 </template>
@@ -8,6 +8,7 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 
 export default {
   name: 'App'

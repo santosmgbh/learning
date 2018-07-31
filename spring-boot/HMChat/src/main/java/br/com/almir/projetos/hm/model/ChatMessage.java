@@ -25,7 +25,7 @@ public class ChatMessage implements Serializable{
 	private String text;	
 	private String fromUsername;
 	private String toUsername;
-	private Date sended;
+	private Long sended;
 	private Boolean read = false;
 	
 	
@@ -54,10 +54,11 @@ public class ChatMessage implements Serializable{
 	public void setToUsername(String toUsername) {
 		this.toUsername = toUsername;
 	}
-	public Date getSended() {
+
+	public Long getSended() {
 		return sended;
 	}
-	public void setSended(Date sended) {
+	public void setSended(Long sended) {
 		this.sended = sended;
 	}
 	public Boolean getRead() {

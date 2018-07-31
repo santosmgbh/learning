@@ -40,8 +40,18 @@ public class UserController {
 
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> create(@RequestBody User user) {
-		user.setPassword(getEncoder().encode(user.getPassword()));		
+	public ResponseEntity<?> create(@RequestBody User user) {		
+		
+		if(user.getName() == null || user.getPassword() == null || user.getUsername() == null) {
+			return new ResponseEntity<User>(user, HttpStatus.BAD_REQUEST);
+		}		
+		
+		user.setPassword(getEncoder().encode(user.getPassword()));
+		
+		if(userRepository.existsByUsername(user.getUsername())) {
+			return new ResponseEntity<User>(user, HttpStatus.CONFLICT);
+		}
+		
 		userRepository.save(user);
 
 		if (user.getId() != null) {
@@ -57,6 +67,7 @@ public class UserController {
 		List<User> users = userRepository.findAll();
 		
 		String loggedUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 		for(User u: users) {
 			if(loggedUser.equals(u.getUsername()))
 				continue;

@@ -1,6 +1,14 @@
 import Vue from 'vue'
 
 export default {
+    showBasic(title, message, type) {
+        Vue.notify({
+            group: 'foo',
+            title: title,
+            text: message,
+            type: type
+        })
+    },
     show(title, message) {
 
         if (!window.Notification || window.Notification.permission == 'denied') {

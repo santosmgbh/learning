@@ -30,7 +30,7 @@ public class ChatSocketController {
 	@MessageMapping("/sendMessage")
 	@SendTo("/chat/messages/{to}")
 	public void sendMessage(ChatMessage message) throws Exception {		
-		message.setSended(new Date());
+		message.setSended(System.currentTimeMillis());
 		chatMessageRepository.save(message);
 		messageSender.convertAndSend("/chat/messages/"+message.getToUsername(), message);							
 	}

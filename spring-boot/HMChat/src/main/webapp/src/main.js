@@ -6,14 +6,30 @@ import Router from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
 import VueResource from 'vue-resource'
 import Notifications from 'vue-notification'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { faCheck } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Login from './components/Login'
 import Cadastro from './components/Cadastro'
 import Chat from './components/Chat'
+import moment from 'moment'
+
 
 Vue.use(Router)
 Vue.use(BootstrapVue);
 Vue.use(VueResource)
 Vue.use(Notifications)
+
+library.add(faCheck)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+Vue.filter('formatDate', function(value) {  
+  if (value) {    
+    return moment(new Date(value)).format('DD/MM/YYYY hh:mm')
+  }
+});
 
 Vue.config.productionTip = false
 

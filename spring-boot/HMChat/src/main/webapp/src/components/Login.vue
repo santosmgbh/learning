@@ -1,26 +1,35 @@
 <template>
-  <div> 
+  <b-container fluid>  
     <a href="http://localhost:8090/hmchat-api/swagger-ui.html">Docs</a>
-    <table>
-      <body>
-        <tr>
-          <label >Login</label>
-          <input type="text" v-model="username"/>
-        </tr>
-        <tr>
-          <label >Senha</label>
-          <input type="password" v-model="password"/>
-        </tr>
-        <tr>
-          <button @click="login()">Login</button>
-          <button @click="signup()">Cadastre-se</button>
-        </tr>
-      </body>
-    </table>
-  </div>
+
+ <b-form class="mx-auto" style="width: 300px;" >
+      <b-form-group label="Username:"
+                    label-for="input1">
+        <b-form-input id="input1"
+                      type="text"
+                      v-model="username"
+                      required
+                      placeholder="Email">
+        </b-form-input>
+      </b-form-group>
+      <b-form-group label="Senha:"
+                    label-for="input2">
+        <b-form-input id="input2"
+                      type="password"
+                      v-model="password"
+                      required
+                      placeholder="Senha">
+        </b-form-input>
+      </b-form-group>      
+      <b-button type="button" @click="login" variant="success">Acessar</b-button>
+      <b-button type="button" @click="signup()" variant="primary">Cadastrar</b-button>
+    </b-form>    
+  <!-- Content here -->
+</b-container>
 </template>
 
 <script>
+import Notification from '../util/notification'
 export default {
   name: "Login",
   data() {
@@ -45,6 +54,7 @@ export default {
             this.$router.push({name: "chat"});
           },
           error => {
+            Notification.showBasic("Acesso", "Usuário e/ou senha incorretos!", "error");
             console.log(error);
           }
         )
