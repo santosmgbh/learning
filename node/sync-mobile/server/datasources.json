@@ -1,0 +1,12 @@
+{
+  "bancodados": {
+    "host": "192.168.1.24",
+    "port": 1521,
+    "database": "geomubdv",
+    "password": "#WEBDV#",
+    "name": "bancodados",
+    "tns": "(DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.1.24)(PORT = 1521)))(CONNECT_DATA =(SID = geomubdv)(SERVER = DEDICATED)))",
+    "user": "USER_GEOSITE_WEB",
+    "connector": "oracle"
+  }
+}

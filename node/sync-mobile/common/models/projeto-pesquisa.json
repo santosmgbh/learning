@@ -1,0 +1,31 @@
+{
+  "name": "projetoPesquisa",
+  "base": "PersistedModel",
+  "strict": "throw",
+  "options": {
+    "validateUpsert": true,
+    "oracle": {
+      "schema": "DGUBI",
+      "table": "DG_PROJETO_PESQUISA"
+    }
+  },
+  "properties": {
+    "ENTITYID": {
+      "type": "number",
+      "required": true,
+      "id": true
+    },
+    "NOME": {
+      "type": "string",
+      "required": true
+    },
+    "DESCRICAO": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
